@@ -16,7 +16,7 @@ namespace ExactOnline.Client.Sdk.Interfaces
 
 		Boolean Delete(T entity);
 
-		int Count(); // For $count function API
+		int Count(string query); // For $count function API
 
 		void RegistrateLinkedEntityField(string fieldname);
 	}

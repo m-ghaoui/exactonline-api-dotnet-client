@@ -165,11 +165,11 @@ namespace ExactOnline.Client.Sdk.Helpers
 			return (int)jsonObject.d["results"][0]["CurrentDivision"].Value;
 		}
 
-		#endregion
+        #endregion
 
-		#region Private methods
+        #region Private methods
 
-		private HttpWebRequest CreateRequest(string url, string oDataQuery, RequestTypeEnum method)
+	    private HttpWebRequest CreateRequest(string url, string oDataQuery, RequestTypeEnum method, string acceptContentType = "application/json")
 		{
 			if (!string.IsNullOrEmpty(oDataQuery))
 			{
@@ -179,8 +179,11 @@ namespace ExactOnline.Client.Sdk.Helpers
 			var request = (HttpWebRequest)WebRequest.Create(url);
 			request.Method = method.ToString();
 			request.ContentType = "application/json";
-			request.Accept = "application/json";
-			request.Headers.Add("Authorization", "Bearer " + _accessTokenDelegate());
+		    if (!string.IsNullOrEmpty(acceptContentType))
+		    {
+		        request.Accept = acceptContentType;
+		    }
+		    request.Headers.Add("Authorization", "Bearer " + _accessTokenDelegate());
 
 			return request;
 		}
@@ -242,7 +245,94 @@ namespace ExactOnline.Client.Sdk.Helpers
 			return responseValue;
 		}
 
-		#endregion
+        /// <summary>
+        /// Request without 'Accept' Header, including parameters
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="oDataQuery"></param>
+        /// <returns></returns>
+	    public string DoCleanRequest(string uri, string oDataQuery)
+	    {
+            if (string.IsNullOrEmpty(uri)) throw new ArgumentException("Cannot perform request with empty endpoint");
 
-	}
+            var request = CreateRequest(uri, oDataQuery, RequestTypeEnum.GET, null);
+
+            Debug.Write("GET ");
+            Debug.WriteLine(request.RequestUri);
+
+            return GetResponse(request);
+        }
+
+        public byte[] DoGetFileRequest(string endpoint, string acceptContentType)
+        {
+            var request = CreateRequest(endpoint, null, RequestTypeEnum.GET, acceptContentType);
+            return GetFileResponse(request);
+        }
+
+        private byte[] GetFileResponse(HttpWebRequest request)
+        {
+            // Grab the response
+            byte[] responseValue = default(byte[]);
+
+            // Get response. If this fails: Throw the correct Exception (for testability)
+            try
+            {
+                var response = request.GetResponse();
+                using (var responseStream = response.GetResponseStream())
+                {
+                    if (responseStream != null)
+                    {
+                        var reader = new StreamReader(responseStream);
+
+                        using (var memstream = new MemoryStream())
+                        {
+                            var buffer = new byte[512];
+                            int bytesRead;
+
+                            while ((bytesRead = reader.BaseStream.Read(buffer, 0, buffer.Length)) > 0)
+                            {
+                                memstream.Write(buffer, 0, bytesRead);
+                            }
+
+                            responseValue = memstream.ToArray(); 
+                        }
+                    }
+                }
+            }
+			catch (WebException ex)
+			{
+				var statusCode = (((HttpWebResponse)ex.Response).StatusCode);
+				Debug.WriteLine(ex.Message);
+
+				var messageFromServer = new StreamReader(ex.Response.GetResponseStream()).ReadToEnd();
+				Debug.WriteLine(messageFromServer);
+				Debug.WriteLine("");
+
+				switch (statusCode)
+				{
+					case HttpStatusCode.BadRequest: // 400
+					case HttpStatusCode.MethodNotAllowed: // 405
+						throw new BadRequestException(ex.Message, ex);
+
+					case HttpStatusCode.Unauthorized: //401
+						throw new UnauthorizedException(ex.Message, ex); // 401
+
+					case HttpStatusCode.Forbidden:
+						throw new ForbiddenException(ex.Message, ex); // 403
+
+					case HttpStatusCode.NotFound:
+						throw new NotFoundException(ex.Message, ex); // 404
+
+					case HttpStatusCode.InternalServerError: // 500
+						throw new InternalServerErrorException(messageFromServer, ex);
+				}
+
+				throw;
+			}
+
+            return responseValue;
+        }
+        #endregion
+
+    }
 }

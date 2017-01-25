@@ -14,7 +14,8 @@ namespace ExactOnline.Client.Sdk.Interfaces
 
 		Boolean Delete(string keyName, string guid);
 
-		int Count();
+        int Count(string parameters);
 
-	}
+        byte[] GetPdf();
+    }
 }

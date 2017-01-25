@@ -18,34 +18,46 @@ namespace ExactOnline.Client.Sdk.Controllers
 
 		#region Constructors
 
-		/// <summary>
-		/// Create instance of ExactClient
-		/// </summary>
-		/// <param name="exactOnlineUrl">The Exact Online URL for your country</param>
-		/// <param name="division">Division number</param>
-		/// <param name="accesstokenDelegate">Delegate that will be executed the access token is expired</param>
-		public ExactOnlineClient(string exactOnlineUrl, int division, AccessTokenManagerDelegate accesstokenDelegate)
+	    /// <summary>
+	    /// Create instance of ExactClient
+	    /// </summary>
+	    /// <param name="exactOnlineUrl">The Exact Online URL for your country</param>
+	    /// <param name="division">Division number</param>
+	    /// <param name="accesstokenDelegate">Delegate that will be executed the access token is expired</param>
+	    /// <param name="isApiCall">Set to false if this is not an API call (e.g., call for an attachment)</param>
+	    public ExactOnlineClient(string exactOnlineUrl, int division, AccessTokenManagerDelegate accesstokenDelegate, bool isApiCall = true)
 		{
 			// Set culture for correct deserializing of API Response (comma and points)
 			_apiConnector = new ApiConnector(accesstokenDelegate);
 			//Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
 
-			if (!exactOnlineUrl.EndsWith("/")) exactOnlineUrl += "/";
-			_exactOnlineApiUrl = exactOnlineUrl + "api/v1/";
+		    if (isApiCall)
+		    {
+		        if (!exactOnlineUrl.EndsWith("/")) exactOnlineUrl += "/";
 
-			_division = (division > 0) ? division : GetDivision();
-			string serviceRoot = _exactOnlineApiUrl + _division + "/";
+		        _exactOnlineApiUrl = exactOnlineUrl + "api/v1/";
 
-			_controllers = new ControllerList(_apiConnector, serviceRoot);
-		}
+		        _division = (division > 0) ? division : GetDivision();
 
-		/// <summary>
-		/// Create instance of ExactClient
-		/// </summary>
-		/// <param name="exactOnlineUrl">{URI}/</param>
-		/// <param name="accesstokenDelegate">Valid oAuth AccessToken</param>
-		public ExactOnlineClient(string exactOnlineUrl, AccessTokenManagerDelegate accesstokenDelegate)
-			: this(exactOnlineUrl, 0, accesstokenDelegate)
+		        string serviceRoot = _exactOnlineApiUrl + _division + "/";
+		        _controllers = new ControllerList(_apiConnector, serviceRoot);
+		    }
+		    else
+		    {
+		        _exactOnlineApiUrl = exactOnlineUrl;
+                // _division = (division > 0) ? division : GetDivision();
+                _controllers = new ControllerList(_apiConnector, exactOnlineUrl);
+            }           
+        }
+
+        /// <summary>
+        /// Create instance of ExactClient
+        /// </summary>
+        /// <param name="exactOnlineUrl">{URI}/</param>
+        /// <param name="accesstokenDelegate">Valid oAuth AccessToken</param>
+        /// <param name="isApiCall">Set to false if this is not an API call (e.g., call for an attachment)</param>
+        public ExactOnlineClient(string exactOnlineUrl, AccessTokenManagerDelegate accesstokenDelegate, bool isApiCall = true)
+			: this(exactOnlineUrl, 0, accesstokenDelegate, isApiCall)
 		{
 		}
 
@@ -97,6 +109,12 @@ namespace ExactOnline.Client.Sdk.Controllers
 			return new ExactOnlineQuery<T>(controller);
 		}
 
-		#endregion
-	}
+        public byte[] GetPdfDocument()
+        {
+            var conn = new ApiConnection(_apiConnector, _exactOnlineApiUrl);
+            return conn.GetPdf();
+        }
+
+        #endregion
+    }
 }

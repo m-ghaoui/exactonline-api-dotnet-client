@@ -60,9 +60,9 @@ namespace ExactOnline.Client.Sdk.Controllers
 		/// <summary>
 		/// Returns the number of entities of the current type
 		/// </summary>
-		public int Count()
+		public int Count(string query)
 		{
-			return _conn.Count();
+			return _conn.Count(query);
 		}
 
 		/// <summary>

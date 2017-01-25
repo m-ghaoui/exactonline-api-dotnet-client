@@ -196,7 +196,7 @@ namespace ExactOnline.Client.Sdk.Helpers
 		/// <returns></returns>
 		public int Count()
 		{
-			return _controller.Count();
+			return _controller.Count(CreateODataQuery(false));
 		}
 
 
