@@ -28,18 +28,6 @@ namespace ExactOnline.Client.Sdk.Helpers
 		}
 
 		/// <summary>
-		/// Gets the name of the generic type
-		/// </summary>
-		private static string GetTypename<T>()
-		{
-			// Get entity name from type
-			var entity = typeof(T).ToString();
-			var split = entity.Split('.');
-			entity = split[split.Length - 1];
-			return entity;
-		}
-
-		/// <summary>
 		/// Method for getting the correct EntityManager. This method is used as a Delegate
 		/// </summary>
 		public IEntityManager GetEntityManager(Type type)
@@ -55,7 +43,7 @@ namespace ExactOnline.Client.Sdk.Helpers
 		/// </summary>
 		public IController<T> GetController<T>() where T : class
 		{
-			var typename = GetTypename<T>();
+			var typename = typeof(T).Name;
 			var returncontroller = (Controller<T>)_controllers[typename];
 
 			// If not exists: create

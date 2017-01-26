@@ -171,6 +171,6 @@ Public Class Services
         Services.Add("VatPercentage", "VAT/VatPercentages")
         Services.Add("Warehouse", "Inventory/Warehouses")
         Services.Add("Workcenter", "Manufacturing/Workcenters")
-
+        Services.Add("WebhookSubscription", "webhooks/WebhookSubscriptions")
     End Sub
 End Class

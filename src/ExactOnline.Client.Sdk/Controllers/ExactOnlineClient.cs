@@ -11,7 +11,7 @@ namespace ExactOnline.Client.Sdk.Controllers
 	/// </summary>
 	public class ExactOnlineClient
 	{
-		private readonly ApiConnector _apiConnector;
+        private readonly ApiConnector _apiConnector;
 		private readonly string _exactOnlineApiUrl;		// https://start.exactonline.nl/api/v1
 		private readonly ControllerList _controllers;
 		private int _division;
@@ -69,15 +69,15 @@ namespace ExactOnline.Client.Sdk.Controllers
 		/// Returns the current user data
 		/// </summary>
 		/// <returns>Me entity</returns>
-		public Me CurrentMe()
-		{
-			var conn = new ApiConnection(_apiConnector, _exactOnlineApiUrl + "current/Me");
-			string response = conn.Get("$select=*");
-			response = ApiResponseCleaner.GetJsonArray(response);
-			var converter = new EntityConverter();
-			var currentMe = converter.ConvertJsonArrayToObjectList<Me>(response);
-			return currentMe.FirstOrDefault();
-		}
+		//public Me CurrentMe()
+		//{
+		//	var conn = new ApiConnection(_apiConnector, _exactOnlineApiUrl + "current/Me");
+		//	string response = conn.Get("$select=*");
+		//	response = ApiResponseCleaner.GetJsonArray(response);
+		//	var converter = new EntityConverter();
+		//	var currentMe = converter.ConvertJsonArrayToObjectList<Me>(response);
+		//	return currentMe.FirstOrDefault();
+		//}
 
 		/// <summary>
 		/// return the division number of the current user
@@ -90,8 +90,13 @@ namespace ExactOnline.Client.Sdk.Controllers
 				return _division;
 			}
 
-			var currentMe = CurrentMe();
-			if (currentMe != null)
+            var conn = new ApiConnection(_apiConnector, _exactOnlineApiUrl + "current/Me");
+            string response = conn.Get("$select=CurrentDivision");
+            response = ApiResponseCleaner.GetJsonArray(response);
+            var converter = new EntityConverter();
+            var currentMe = converter.ConvertJsonArrayToObjectList<Me>(response).FirstOrDefault(); ;
+
+            if (currentMe != null)
 			{
 				_division = currentMe.CurrentDivision;
 				return _division;
