@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Text;
+using NLog;
 
 namespace ExactOnline.Client.Sdk.Helpers
 {
@@ -16,7 +17,9 @@ namespace ExactOnline.Client.Sdk.Helpers
 	/// </summary>
 	public class ApiConnector : IApiConnector
 	{
-		private readonly AccessTokenManagerDelegate _accessTokenDelegate;
+        protected static Logger Log = LogManager.GetCurrentClassLogger();
+
+        private readonly AccessTokenManagerDelegate _accessTokenDelegate;
 
 		#region Constructor
 
@@ -46,8 +49,8 @@ namespace ExactOnline.Client.Sdk.Helpers
 
 			var request = CreateRequest(endpoint, oDataQuery, RequestTypeEnum.GET);
 
-			Debug.Write("GET ");
-			Debug.WriteLine(request.RequestUri);
+            Log.Debug("GET ");
+			Log.Debug(request.RequestUri);
 
 			return GetResponse(request);
 		}
@@ -80,9 +83,9 @@ namespace ExactOnline.Client.Sdk.Helpers
 				throw new BadRequestException(); // Post request needs data
 			}
 
-			Debug.Write("POST ");
-			Debug.WriteLine(request.RequestUri);
-			Debug.WriteLine(postdata);
+			Log.Debug("POST ");
+			Log.Debug(request.RequestUri);
+			Log.Debug(postdata);
 
 			return GetResponse(request);
 		}
@@ -115,9 +118,9 @@ namespace ExactOnline.Client.Sdk.Helpers
 				throw new BadRequestException();
 			}
 
-			Debug.Write("PUT ");
-			Debug.WriteLine(request.RequestUri);
-			Debug.WriteLine(putData);
+			Log.Debug("PUT ");
+			Log.Debug(request.RequestUri);
+			Log.Debug(putData);
 
 			return GetResponse(request);
 		}
@@ -133,8 +136,8 @@ namespace ExactOnline.Client.Sdk.Helpers
 
 			var request = CreateRequest(endpoint, null, RequestTypeEnum.DELETE);
 
-			Debug.Write("DELETE ");
-			Debug.WriteLine(request.RequestUri);
+			Log.Debug("DELETE ");
+			Log.Debug(request.RequestUri);
 
 			return GetResponse(request);
 		}
@@ -193,7 +196,7 @@ namespace ExactOnline.Client.Sdk.Helpers
 			// Grab the response
 			var responseValue = string.Empty;
 
-			Debug.WriteLine("RESPONSE");
+			Log.Debug("RESPONSE");
 
 			// Get response. If this fails: Throw the correct Exception (for testability)
 			try
@@ -211,11 +214,11 @@ namespace ExactOnline.Client.Sdk.Helpers
 			catch (WebException ex)
 			{
 				var statusCode = (((HttpWebResponse)ex.Response).StatusCode);
-				Debug.WriteLine(ex.Message);
+				Log.Debug(ex.Message);
 
 				var messageFromServer = new StreamReader(ex.Response.GetResponseStream()).ReadToEnd();
-				Debug.WriteLine(messageFromServer);
-				Debug.WriteLine("");
+				Log.Debug(messageFromServer);
+				Log.Debug("");
 
 				switch (statusCode)
 				{
@@ -239,8 +242,8 @@ namespace ExactOnline.Client.Sdk.Helpers
 				throw;
 			}
 
-			Debug.WriteLine(responseValue);
-			Debug.WriteLine("");
+			Log.Debug(responseValue);
+			Log.Debug("");
 
 			return responseValue;
 		}
@@ -257,8 +260,8 @@ namespace ExactOnline.Client.Sdk.Helpers
 
             var request = CreateRequest(uri, oDataQuery, RequestTypeEnum.GET, null);
 
-            Debug.Write("GET ");
-            Debug.WriteLine(request.RequestUri);
+            Log.Debug("GET ");
+            Log.Debug(request.RequestUri);
 
             return GetResponse(request);
         }
@@ -302,11 +305,11 @@ namespace ExactOnline.Client.Sdk.Helpers
 			catch (WebException ex)
 			{
 				var statusCode = (((HttpWebResponse)ex.Response).StatusCode);
-				Debug.WriteLine(ex.Message);
+				Log.Debug(ex.Message);
 
 				var messageFromServer = new StreamReader(ex.Response.GetResponseStream()).ReadToEnd();
-				Debug.WriteLine(messageFromServer);
-				Debug.WriteLine("");
+				Log.Debug(messageFromServer);
+				Log.Debug("");
 
 				switch (statusCode)
 				{
