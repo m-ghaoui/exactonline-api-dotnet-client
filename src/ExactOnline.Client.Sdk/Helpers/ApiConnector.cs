@@ -49,8 +49,8 @@ namespace ExactOnline.Client.Sdk.Helpers
 
 			var request = CreateRequest(endpoint, oDataQuery, RequestTypeEnum.GET);
 
-            Log.Debug("GET ");
-			Log.Debug(request.RequestUri);
+            Log.Trace("GET ");
+			Log.Trace(request.RequestUri);
 
 			return GetResponse(request);
 		}
@@ -83,9 +83,9 @@ namespace ExactOnline.Client.Sdk.Helpers
 				throw new BadRequestException(); // Post request needs data
 			}
 
-			Log.Debug("POST ");
-			Log.Debug(request.RequestUri);
-			Log.Debug(postdata);
+			Log.Trace("POST ");
+			Log.Trace(request.RequestUri);
+			Log.Trace(postdata);
 
 			return GetResponse(request);
 		}
@@ -118,9 +118,9 @@ namespace ExactOnline.Client.Sdk.Helpers
 				throw new BadRequestException();
 			}
 
-			Log.Debug("PUT ");
-			Log.Debug(request.RequestUri);
-			Log.Debug(putData);
+			Log.Trace("PUT ");
+			Log.Trace(request.RequestUri);
+			Log.Trace(putData);
 
 			return GetResponse(request);
 		}
@@ -136,8 +136,8 @@ namespace ExactOnline.Client.Sdk.Helpers
 
 			var request = CreateRequest(endpoint, null, RequestTypeEnum.DELETE);
 
-			Log.Debug("DELETE ");
-			Log.Debug(request.RequestUri);
+			Log.Trace("DELETE ");
+			Log.Trace(request.RequestUri);
 
 			return GetResponse(request);
 		}
@@ -196,7 +196,7 @@ namespace ExactOnline.Client.Sdk.Helpers
 			// Grab the response
 			var responseValue = string.Empty;
 
-			Log.Debug("RESPONSE");
+			Log.Trace("RESPONSE");
 
 			// Get response. If this fails: Throw the correct Exception (for testability)
 			try
@@ -214,11 +214,11 @@ namespace ExactOnline.Client.Sdk.Helpers
 			catch (WebException ex)
 			{
 				var statusCode = (((HttpWebResponse)ex.Response).StatusCode);
-				Log.Debug(ex.Message);
+				Log.Trace(ex.Message);
 
 				var messageFromServer = new StreamReader(ex.Response.GetResponseStream()).ReadToEnd();
-				Log.Debug(messageFromServer);
-				Log.Debug("");
+				Log.Trace(messageFromServer);
+				Log.Trace("");
 
 				switch (statusCode)
 				{
@@ -242,8 +242,8 @@ namespace ExactOnline.Client.Sdk.Helpers
 				throw;
 			}
 
-			Log.Debug(responseValue);
-			Log.Debug("");
+			Log.Trace(responseValue);
+			Log.Trace("");
 
 			return responseValue;
 		}
@@ -260,8 +260,8 @@ namespace ExactOnline.Client.Sdk.Helpers
 
             var request = CreateRequest(uri, oDataQuery, RequestTypeEnum.GET, null);
 
-            Log.Debug("GET ");
-            Log.Debug(request.RequestUri);
+            Log.Trace("GET ");
+            Log.Trace(request.RequestUri);
 
             return GetResponse(request);
         }
@@ -297,7 +297,7 @@ namespace ExactOnline.Client.Sdk.Helpers
                                 memstream.Write(buffer, 0, bytesRead);
                             }
 
-                            responseValue = memstream.ToArray(); 
+                            responseValue = memstream.ToArray();
                         }
                     }
                 }
@@ -305,11 +305,11 @@ namespace ExactOnline.Client.Sdk.Helpers
 			catch (WebException ex)
 			{
 				var statusCode = (((HttpWebResponse)ex.Response).StatusCode);
-				Log.Debug(ex.Message);
+				Log.Trace(ex.Message);
 
 				var messageFromServer = new StreamReader(ex.Response.GetResponseStream()).ReadToEnd();
-				Log.Debug(messageFromServer);
-				Log.Debug("");
+				Log.Trace(messageFromServer);
+				Log.Trace("");
 
 				switch (statusCode)
 				{
