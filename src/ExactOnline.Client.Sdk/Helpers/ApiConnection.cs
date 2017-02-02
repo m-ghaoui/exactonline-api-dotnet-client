@@ -16,7 +16,7 @@ namespace ExactOnline.Client.Sdk.Helpers
 		}
 
 		public string EndPoint { get; set; } // private before. Changed for $extend= functionality
-		//private string _extend;
+											 //private string _extend;
 
 		/// <summary>
 		/// Creates a new instance of APIConnection
@@ -44,7 +44,7 @@ namespace ExactOnline.Client.Sdk.Helpers
 		public string Get(string parameters)
 		{
 			string response = _conn.DoGetRequest(EndPoint, parameters);
-			if(response.Contains("Object moved"))
+			if (response.Contains("Object moved"))
 			{
 				throw new Exception("Invalid Access Token");
 			}
@@ -75,7 +75,7 @@ namespace ExactOnline.Client.Sdk.Helpers
 			{
 				endpoint += "(" + guid + ")";
 			}
-			
+
 			string response = _conn.DoGetRequest(endpoint, parameters);
 			return response;
 		}
@@ -113,7 +113,7 @@ namespace ExactOnline.Client.Sdk.Helpers
 			{
 				// Create correct endpoint
 				string endpoint = EndPoint;
-				if(keyName.Contains("ID")) endpoint += "(guid'" + guid + "')";
+				if (keyName.Contains("ID")) endpoint += "(guid'" + guid + "')";
 				else endpoint += "(" + guid + ")";
 
 				string response = _conn.DoPutRequest(endpoint, data);
@@ -163,20 +163,20 @@ namespace ExactOnline.Client.Sdk.Helpers
 			return returnValue;
 		}
 
-        /// <summary>
-        /// Counts the number of resources/entities, including parameters
-        /// </summary>
-        /// <param name="parameters">Parameters</param>
-        /// <returns></returns>
-        public int Count(string parameters)
-        {
-            string response = _conn.DoCleanRequest(EndPoint + "/$count", parameters);
-            return int.Parse(response);
-        }
+		/// <summary>
+		/// Counts the number of resources/entities, including parameters
+		/// </summary>
+		/// <param name="parameters">Parameters</param>
+		/// <returns></returns>
+		public int Count(string parameters)
+		{
+			string response = _conn.DoCleanRequest(EndPoint + "/$count", parameters);
+			return int.Parse(response);
+		}
 
-	    public byte[] GetPdf()
-	    {
-            return _conn.DoGetFileRequest(EndPoint, "application/pdf");
-        }
+		public byte[] GetPdf()
+		{
+			return _conn.DoGetFileRequest(EndPoint, "application/pdf");
+		}
 	}
 }

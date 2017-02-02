@@ -11,52 +11,52 @@ namespace ExactOnline.Client.Sdk.Controllers
 	/// </summary>
 	public class ExactOnlineClient
 	{
-        private readonly ApiConnector _apiConnector;
-		private readonly string _exactOnlineApiUrl;		// https://start.exactonline.nl/api/v1
+		private readonly ApiConnector _apiConnector;
+		private readonly string _exactOnlineApiUrl;     // https://start.exactonline.nl/api/v1
 		private readonly ControllerList _controllers;
 		private int _division;
 
 		#region Constructors
 
-	    /// <summary>
-	    /// Create instance of ExactClient
-	    /// </summary>
-	    /// <param name="exactOnlineUrl">The Exact Online URL for your country</param>
-	    /// <param name="division">Division number</param>
-	    /// <param name="accesstokenDelegate">Delegate that will be executed the access token is expired</param>
-	    /// <param name="isApiCall">Set to false if this is not an API call (e.g., call for an attachment)</param>
-	    public ExactOnlineClient(string exactOnlineUrl, int division, AccessTokenManagerDelegate accesstokenDelegate, bool isApiCall = true)
+		/// <summary>
+		/// Create instance of ExactClient
+		/// </summary>
+		/// <param name="exactOnlineUrl">The Exact Online URL for your country</param>
+		/// <param name="division">Division number</param>
+		/// <param name="accesstokenDelegate">Delegate that will be executed the access token is expired</param>
+		/// <param name="isApiCall">Set to false if this is not an API call (e.g., call for an attachment)</param>
+		public ExactOnlineClient(string exactOnlineUrl, int division, AccessTokenManagerDelegate accesstokenDelegate, bool isApiCall = true)
 		{
 			// Set culture for correct deserializing of API Response (comma and points)
 			_apiConnector = new ApiConnector(accesstokenDelegate);
 			//Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
 
-		    if (isApiCall)
-		    {
-		        if (!exactOnlineUrl.EndsWith("/")) exactOnlineUrl += "/";
+			if (isApiCall)
+			{
+				if (!exactOnlineUrl.EndsWith("/")) exactOnlineUrl += "/";
 
-		        _exactOnlineApiUrl = exactOnlineUrl + "api/v1/";
+				_exactOnlineApiUrl = exactOnlineUrl + "api/v1/";
 
-		        _division = (division > 0) ? division : GetDivision();
+				_division = (division > 0) ? division : GetDivision();
 
-		        string serviceRoot = _exactOnlineApiUrl + _division + "/";
-		        _controllers = new ControllerList(_apiConnector, serviceRoot);
-		    }
-		    else
-		    {
-		        _exactOnlineApiUrl = exactOnlineUrl;
-                // _division = (division > 0) ? division : GetDivision();
-                _controllers = new ControllerList(_apiConnector, exactOnlineUrl);
-            }           
-        }
+				string serviceRoot = _exactOnlineApiUrl + _division + "/";
+				_controllers = new ControllerList(_apiConnector, serviceRoot);
+			}
+			else
+			{
+				_exactOnlineApiUrl = exactOnlineUrl;
+				// _division = (division > 0) ? division : GetDivision();
+				_controllers = new ControllerList(_apiConnector, exactOnlineUrl);
+			}
+		}
 
-        /// <summary>
-        /// Create instance of ExactClient
-        /// </summary>
-        /// <param name="exactOnlineUrl">{URI}/</param>
-        /// <param name="accesstokenDelegate">Valid oAuth AccessToken</param>
-        /// <param name="isApiCall">Set to false if this is not an API call (e.g., call for an attachment)</param>
-        public ExactOnlineClient(string exactOnlineUrl, AccessTokenManagerDelegate accesstokenDelegate, bool isApiCall = true)
+		/// <summary>
+		/// Create instance of ExactClient
+		/// </summary>
+		/// <param name="exactOnlineUrl">{URI}/</param>
+		/// <param name="accesstokenDelegate">Valid oAuth AccessToken</param>
+		/// <param name="isApiCall">Set to false if this is not an API call (e.g., call for an attachment)</param>
+		public ExactOnlineClient(string exactOnlineUrl, AccessTokenManagerDelegate accesstokenDelegate, bool isApiCall = true)
 			: this(exactOnlineUrl, 0, accesstokenDelegate, isApiCall)
 		{
 		}
@@ -90,13 +90,13 @@ namespace ExactOnline.Client.Sdk.Controllers
 				return _division;
 			}
 
-            var conn = new ApiConnection(_apiConnector, _exactOnlineApiUrl + "current/Me");
-            string response = conn.Get("$select=CurrentDivision");
-            response = ApiResponseCleaner.GetJsonArray(response);
-            var converter = new EntityConverter();
-            var currentMe = converter.ConvertJsonArrayToObjectList<Me>(response).FirstOrDefault(); ;
+			var conn = new ApiConnection(_apiConnector, _exactOnlineApiUrl + "current/Me");
+			string response = conn.Get("$select=CurrentDivision");
+			response = ApiResponseCleaner.GetJsonArray(response);
+			var converter = new EntityConverter();
+			var currentMe = converter.ConvertJsonArrayToObjectList<Me>(response).FirstOrDefault(); ;
 
-            if (currentMe != null)
+			if (currentMe != null)
 			{
 				_division = currentMe.CurrentDivision;
 				return _division;
@@ -114,12 +114,12 @@ namespace ExactOnline.Client.Sdk.Controllers
 			return new ExactOnlineQuery<T>(controller);
 		}
 
-        public byte[] GetPdfDocument()
-        {
-            var conn = new ApiConnection(_apiConnector, _exactOnlineApiUrl);
-            return conn.GetPdf();
-        }
+		public byte[] GetPdfDocument()
+		{
+			var conn = new ApiConnection(_apiConnector, _exactOnlineApiUrl);
+			return conn.GetPdf();
+		}
 
-        #endregion
-    }
+		#endregion
+	}
 }

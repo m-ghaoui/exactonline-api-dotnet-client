@@ -17,9 +17,9 @@ namespace ExactOnline.Client.Sdk.Helpers
 	/// </summary>
 	public class ApiConnector : IApiConnector
 	{
-        protected static Logger Log = LogManager.GetCurrentClassLogger();
+		protected static Logger Log = LogManager.GetCurrentClassLogger();
 
-        private readonly AccessTokenManagerDelegate _accessTokenDelegate;
+		private readonly AccessTokenManagerDelegate _accessTokenDelegate;
 
 		#region Constructor
 
@@ -49,7 +49,7 @@ namespace ExactOnline.Client.Sdk.Helpers
 
 			var request = CreateRequest(endpoint, oDataQuery, RequestTypeEnum.GET);
 
-            Log.Trace("GET ");
+			Log.Trace("GET ");
 			Log.Trace(request.RequestUri);
 
 			return GetResponse(request);
@@ -168,11 +168,11 @@ namespace ExactOnline.Client.Sdk.Helpers
 			return (int)jsonObject.d["results"][0]["CurrentDivision"].Value;
 		}
 
-        #endregion
+		#endregion
 
-        #region Private methods
+		#region Private methods
 
-	    private HttpWebRequest CreateRequest(string url, string oDataQuery, RequestTypeEnum method, string acceptContentType = "application/json")
+		private HttpWebRequest CreateRequest(string url, string oDataQuery, RequestTypeEnum method, string acceptContentType = "application/json")
 		{
 			if (!string.IsNullOrEmpty(oDataQuery))
 			{
@@ -182,11 +182,11 @@ namespace ExactOnline.Client.Sdk.Helpers
 			var request = (HttpWebRequest)WebRequest.Create(url);
 			request.Method = method.ToString();
 			request.ContentType = "application/json";
-		    if (!string.IsNullOrEmpty(acceptContentType))
-		    {
-		        request.Accept = acceptContentType;
-		    }
-		    request.Headers.Add("Authorization", "Bearer " + _accessTokenDelegate());
+			if (!string.IsNullOrEmpty(acceptContentType))
+			{
+				request.Accept = acceptContentType;
+			}
+			request.Headers.Add("Authorization", "Bearer " + _accessTokenDelegate());
 
 			return request;
 		}
@@ -248,60 +248,60 @@ namespace ExactOnline.Client.Sdk.Helpers
 			return responseValue;
 		}
 
-        /// <summary>
-        /// Request without 'Accept' Header, including parameters
-        /// </summary>
-        /// <param name="uri"></param>
-        /// <param name="oDataQuery"></param>
-        /// <returns></returns>
-	    public string DoCleanRequest(string uri, string oDataQuery)
-	    {
-            if (string.IsNullOrEmpty(uri)) throw new ArgumentException("Cannot perform request with empty endpoint");
+		/// <summary>
+		/// Request without 'Accept' Header, including parameters
+		/// </summary>
+		/// <param name="uri"></param>
+		/// <param name="oDataQuery"></param>
+		/// <returns></returns>
+		public string DoCleanRequest(string uri, string oDataQuery)
+		{
+			if (string.IsNullOrEmpty(uri)) throw new ArgumentException("Cannot perform request with empty endpoint");
 
-            var request = CreateRequest(uri, oDataQuery, RequestTypeEnum.GET, null);
+			var request = CreateRequest(uri, oDataQuery, RequestTypeEnum.GET, null);
 
-            Log.Trace("GET ");
-            Log.Trace(request.RequestUri);
+			Log.Trace("GET ");
+			Log.Trace(request.RequestUri);
 
-            return GetResponse(request);
-        }
+			return GetResponse(request);
+		}
 
-        public byte[] DoGetFileRequest(string endpoint, string acceptContentType)
-        {
-            var request = CreateRequest(endpoint, null, RequestTypeEnum.GET, acceptContentType);
-            return GetFileResponse(request);
-        }
+		public byte[] DoGetFileRequest(string endpoint, string acceptContentType)
+		{
+			var request = CreateRequest(endpoint, null, RequestTypeEnum.GET, acceptContentType);
+			return GetFileResponse(request);
+		}
 
-        private byte[] GetFileResponse(HttpWebRequest request)
-        {
-            // Grab the response
-            byte[] responseValue = default(byte[]);
+		private byte[] GetFileResponse(HttpWebRequest request)
+		{
+			// Grab the response
+			byte[] responseValue = default(byte[]);
 
-            // Get response. If this fails: Throw the correct Exception (for testability)
-            try
-            {
-                var response = request.GetResponse();
-                using (var responseStream = response.GetResponseStream())
-                {
-                    if (responseStream != null)
-                    {
-                        var reader = new StreamReader(responseStream);
+			// Get response. If this fails: Throw the correct Exception (for testability)
+			try
+			{
+				var response = request.GetResponse();
+				using (var responseStream = response.GetResponseStream())
+				{
+					if (responseStream != null)
+					{
+						var reader = new StreamReader(responseStream);
 
-                        using (var memstream = new MemoryStream())
-                        {
-                            var buffer = new byte[512];
-                            int bytesRead;
+						using (var memstream = new MemoryStream())
+						{
+							var buffer = new byte[512];
+							int bytesRead;
 
-                            while ((bytesRead = reader.BaseStream.Read(buffer, 0, buffer.Length)) > 0)
-                            {
-                                memstream.Write(buffer, 0, bytesRead);
-                            }
+							while ((bytesRead = reader.BaseStream.Read(buffer, 0, buffer.Length)) > 0)
+							{
+								memstream.Write(buffer, 0, bytesRead);
+							}
 
-                            responseValue = memstream.ToArray();
-                        }
-                    }
-                }
-            }
+							responseValue = memstream.ToArray();
+						}
+					}
+				}
+			}
 			catch (WebException ex)
 			{
 				var statusCode = (((HttpWebResponse)ex.Response).StatusCode);
@@ -333,9 +333,9 @@ namespace ExactOnline.Client.Sdk.Helpers
 				throw;
 			}
 
-            return responseValue;
-        }
-        #endregion
+			return responseValue;
+		}
+		#endregion
 
-    }
+	}
 }
