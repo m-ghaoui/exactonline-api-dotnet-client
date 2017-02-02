@@ -6,7 +6,7 @@ namespace ExactOnline.Client.Sdk.UnitTests.MockObjects
 	{
 		#region IApiConnection Members
 
-		int IApiConnection.Count()
+		int IApiConnection.Count(string parameters)
 		{
 			return 0;
 		}

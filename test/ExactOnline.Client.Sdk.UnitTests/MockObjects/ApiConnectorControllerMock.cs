@@ -14,6 +14,11 @@ namespace ExactOnline.Client.Sdk.UnitTests.MockObjects
 			return "";
 		}
 
+		public string DoCleanRequest(string uri, string oDataQuery)
+		{
+			return "";
+		}
+
 		public string DoGetRequest(string endpoint, string parameters)
 		{
 			return @"{
@@ -138,6 +143,5 @@ namespace ExactOnline.Client.Sdk.UnitTests.MockObjects
 		{
 			return -1;
 		}
-
 	}
 }

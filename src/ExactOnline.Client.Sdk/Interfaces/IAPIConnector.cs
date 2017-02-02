@@ -11,10 +11,10 @@
 		string DoDeleteRequest(string endpoint);
 
 		string DoCleanRequest(string uri); // Request without Content-Type for $count function
-        string DoCleanRequest(string uri, string oDataQuery); // Request without Content-Type for $count function, including parameters
+		string DoCleanRequest(string uri, string oDataQuery); // Request without Content-Type for $count function, including parameters
 
-        int GetCurrentDivision(string website);
+		int GetCurrentDivision(string website);
 
-        byte[] DoGetFileRequest(string endpoint, string acceptContentType);
-    }
+		byte[] DoGetFileRequest(string endpoint, string acceptContentType);
+	}
 }

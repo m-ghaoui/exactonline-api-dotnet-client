@@ -8,7 +8,7 @@ namespace ExactOnline.Client.Sdk.UnitTests.MockObjects
 	public sealed class ControllerMock<T> : IController<T>
 	{
 
-		public int Count()
+		public int Count(string query)
 		{
 			return 0;
 		}

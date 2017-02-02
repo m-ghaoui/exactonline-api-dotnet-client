@@ -5,7 +5,7 @@ namespace ExactOnline.Client.Sdk.UnitTests.MockObjects
 {
 	public sealed class ApiConnectionEntityControllerMock : IApiConnection
 	{
-		public int Count()
+		public int Count(string parameters)
 		{
 			return 0;
 		}

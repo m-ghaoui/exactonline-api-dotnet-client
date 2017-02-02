@@ -7,7 +7,7 @@ namespace ExactOnline.Client.Sdk.UnitTests.MockObjects
 	/// <summary>
 	/// Simulates APIConnector class
 	/// </summary>
-	public class ApiConnectorMock : IApiConnector 
+	public class ApiConnectorMock : IApiConnector
 	{
 		public String Data { get; set; }
 
@@ -16,6 +16,10 @@ namespace ExactOnline.Client.Sdk.UnitTests.MockObjects
 			return "";
 		}
 
+		public string DoCleanRequest(string uri, string oDataQuery)
+		{
+			return "";
+		}
 
 		public int Count()
 		{

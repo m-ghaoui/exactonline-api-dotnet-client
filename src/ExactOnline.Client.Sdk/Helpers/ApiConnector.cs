@@ -248,6 +248,7 @@ namespace ExactOnline.Client.Sdk.Helpers
 			return responseValue;
 		}
 
+
 		/// <summary>
 		/// Request without 'Accept' Header, including parameters
 		/// </summary>
@@ -260,12 +261,11 @@ namespace ExactOnline.Client.Sdk.Helpers
 
 			var request = CreateRequest(uri, oDataQuery, RequestTypeEnum.GET, null);
 
-			Log.Trace("GET ");
-			Log.Trace(request.RequestUri);
+			Debug.WriteLine("GET ");
+			Debug.WriteLine(request.RequestUri);
 
 			return GetResponse(request);
 		}
-
 		public byte[] DoGetFileRequest(string endpoint, string acceptContentType)
 		{
 			var request = CreateRequest(endpoint, null, RequestTypeEnum.GET, acceptContentType);
