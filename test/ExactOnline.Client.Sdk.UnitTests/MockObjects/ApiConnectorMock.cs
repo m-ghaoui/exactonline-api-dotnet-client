@@ -54,6 +54,11 @@ namespace ExactOnline.Client.Sdk.UnitTests.MockObjects
 			return -1;
 		}
 
-		#endregion
+	    public byte[] DoGetFileRequest(string endpoint, string acceptContentType)
+	    {
+	        throw new NotImplementedException();
+	    }
+
+	    #endregion
 	}
 }
