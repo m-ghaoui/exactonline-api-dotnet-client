@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Threading.Tasks;
 using ExactOnline.Client.Sdk.Interfaces;
 
 namespace ExactOnline.Client.Sdk.Helpers
 {
-	/// <summary>
-	/// Class for connection to a specific part of the REST API (for example: Account, Invoice, Sales, etc.)
-	/// </summary>
-	public class ApiConnection : IApiConnection
+    /// <summary>
+    /// Class for connection to a specific part of the REST API (for example: Account, Invoice, Sales, etc.)
+    /// </summary>
+    public class ApiConnection : IApiConnection
 	{
 		private readonly IApiConnector _conn;
 		public IApiConnector Conn

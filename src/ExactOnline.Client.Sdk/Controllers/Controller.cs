@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using ExactOnline.Client.Models;
 using ExactOnline.Client.Sdk.Delegates;
 using ExactOnline.Client.Sdk.Helpers;
@@ -12,10 +11,10 @@ using ExactOnline.Client.Sdk.Interfaces;
 namespace ExactOnline.Client.Sdk.Controllers
 {
 
-	/// <summary>
-	/// Class for managing entity Objects (Read, Get, Update & Delete)
-	/// </summary>
-	public class Controller<T> : IController<T>, IEntityManager where T : class
+    /// <summary>
+    /// Class for managing entity Objects (Read, Get, Update & Delete)
+    /// </summary>
+    public class Controller<T> : IController<T>, IEntityManager where T : class
 	{
 		private readonly GetEntityController _entityControllerDelegate;
 		public ManagerForEntity GetManagerForEntity;

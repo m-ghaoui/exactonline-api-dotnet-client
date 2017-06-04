@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using ExactOnline.Client.Sdk.Interfaces;
 
 namespace ExactOnline.Client.Sdk.Helpers
 {
-	public class ExactOnlineQuery<T>
+    public class ExactOnlineQuery<T>
 	{
 		private readonly IController<T> _controller;
 		private readonly List<string> _and;

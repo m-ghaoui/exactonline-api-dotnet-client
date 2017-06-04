@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace ExactOnline.Client.Sdk.Interfaces
 {
-	public interface IController<T>
+    public interface IController<T>
 	{
 		List<T> Get(string query);
 
