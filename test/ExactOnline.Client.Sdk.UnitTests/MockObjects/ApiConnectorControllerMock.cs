@@ -143,5 +143,10 @@ namespace ExactOnline.Client.Sdk.UnitTests.MockObjects
 		{
 			return -1;
 		}
+
+	    public byte[] DoGetFileRequest(string endpoint, string acceptContentType)
+	    {
+	        throw new System.NotImplementedException();
+	    }
 	}
 }

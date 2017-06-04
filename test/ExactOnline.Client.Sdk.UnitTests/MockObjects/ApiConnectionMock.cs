@@ -438,7 +438,12 @@ namespace ExactOnline.Client.Sdk.UnitTests.MockObjects
 			return true;
 		}
 
-		#endregion
+	    public byte[] GetPdf()
+	    {
+	        throw new System.NotImplementedException();
+	    }
+
+	    #endregion
 
 	}
 }
